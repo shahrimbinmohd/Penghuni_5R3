@@ -1,97 +1,234 @@
 <!DOCTYPE html>
-<html>
+<html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <title>Pendaftaran Maklumat Penghuni</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pendaftaran Maklumat Penghuni 5R3</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
-    form { background: #fff; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; }
-    input, select { width: 100%; padding: 8px; margin: 5px 0; }
-    button { background: #28a745; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #218838; }
-    .vehicle { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px; background: #fafafa; }
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --primary:#2563eb;
+      --primary-hover:#1d4ed8;
+      --border:#e5e7eb;
+      --success:#10b981;
+      --danger:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin:0; padding: 24px;
+      line-height: 1.5;
+    }
+    .wrap{max-width: 760px; margin: 0 auto;}
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    }
+    h1{font-size: 24px; margin: 0 0 8px}
+    p.lead{color: var(--muted); margin-top:0}
+    .grid{display:grid; gap:12px}
+    @media (min-width:720px){
+      .grid-2{grid-template-columns: 1fr 1fr;}
+    }
+    label{font-weight:600; font-size:14px; color:var(--text); display:block; margin-bottom:6px}
+    input, select{
+      width:100%; padding:12px 14px; border-radius:12px;
+      border:1px solid var(--border); outline:none; background:white; font-size:14px;
+    }
+    input:focus, select:focus{border-color: var(--primary)}
+    .vehicle{border:1px dashed var(--border); padding:12px; border-radius:12px; background:#fafafa}
+    .vehicle + .vehicle{margin-top:10px}
+    .row{display:grid; grid-template-columns: 1fr 180px; gap:10px}
+    .actions{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap}
+    button{
+      appearance:none; border:none; border-radius:12px; padding:12px 16px; cursor:pointer;
+      font-weight:600; font-size:14px;
+    }
+    .btn-primary{background:var(--primary); color:white}
+    .btn-primary:hover{background:var(--primary-hover)}
+    .btn-soft{background:#eef2ff; color:#3730a3}
+    .btn-danger{background:#fee2e2; color:#b91c1c}
+    .note{font-size:12px; color:var(--muted)}
+    .toast{margin-top:12px; padding:12px 14px; border-radius:12px; display:none}
+    .toast.show{display:block}
+    .toast.success{background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0}
+    .toast.error{background:#fef2f2; color:#991b1b; border:1px solid #fecaca}
+    .foot{font-size:12px; color:var(--muted); margin-top:18px}
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Pendaftaran Maklumat Penghuni 5R3</h1>
+      <p class="lead">Sila isi maklumat di bawah. Anda boleh menambah lebih daripada satu kenderaan.</p>
 
-<h2>Pendaftaran Maklumat Penghuni</h2>
-<form id="pendaftaranForm">
-  <input type="text" name="nama" placeholder="Nama Penuh" required>
-  <input type="text" name="telefon" placeholder="Nombor Telefon" required>
-  <select name="blok" required>
-    <option value="">Pilih Blok</option>
-    <option value="A">A</option>
-    <option value="B">B</option>
-    <option value="C">C</option>
-    <option value="D">D</option>
-    <option value="E">E</option>
-  </select>
-  <input type="text" name="unit" placeholder="Nombor Unit" required>
+      <form id="form" class="grid">
+        <div class="grid grid-2">
+          <div>
+            <label for="nama">Nama Penuh</label>
+            <input id="nama" name="nama" required autocomplete="name" placeholder="Contoh: Ahmad Bin Ali" />
+          </div>
+          <div>
+            <label for="telefon">Nombor Telefon</label>
+            <input id="telefon" name="telefon" required inputmode="tel" autocomplete="tel"
+                   placeholder="Contoh: 0123456789" />
+          </div>
+        </div>
 
-  <div id="vehicles">
-    <div class="vehicle">
-      <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan" required>
-      <select name="jeniskenderaan[]" required>
-        <option value="">Jenis Kenderaan</option>
-        <option value="Kereta">Kereta</option>
-        <option value="Motosikal">Motosikal</option>
-        <option value="Van">Van</option>
-      </select>
+        <div class="grid grid-2">
+          <div>
+            <label for="blok">Blok</label>
+            <select id="blok" name="blok" required>
+              <option value="">-- Pilih Blok --</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+            </select>
+          </div>
+          <div>
+            <label for="unit">Nombor Unit</label>
+            <input id="unit" name="unit" required placeholder="Contoh: 12-3" />
+          </div>
+        </div>
+
+        <div>
+          <label>Kenderaan</label>
+          <div id="vehicles"></div>
+          <div class="actions">
+            <button type="button" class="btn-soft" id="addVehicle">+ Tambah Kenderaan</button>
+            <button type="button" class="btn-danger" id="clearVehicles">Padam Semua Kenderaan</button>
+          </div>
+          <div class="note">Pastikan nombor pendaftaran ditulis tanpa ruang (contoh: WXX1234).</div>
+        </div>
+
+        <div class="actions">
+          <button class="btn-primary" type="submit" id="submitBtn">Hantar Pendaftaran</button>
+          <span id="saving" class="note" style="display:none">Menyimpan…</span>
+        </div>
+
+        <div id="toast" class="toast"></div>
+
+        <div class="foot">Data anda akan disimpan di Google Sheet pentadbiran. Dengan menghantar borang ini anda bersetuju maklumat digunakan untuk tujuan keselamatan komuniti.</div>
+      </form>
     </div>
   </div>
 
-  <button type="button" onclick="tambahKenderaan()">+ Tambah Kenderaan</button>
-  <br><br>
-  <button type="submit">Daftar</button>
-</form>
+  <template id="vehicleTemplate">
+    <div class="vehicle">
+      <div class="row">
+        <input name="noplat[]" placeholder="No Pendaftaran (cth: ABC1234)" required />
+        <select name="jeniskenderaan[]" required>
+          <option value="">Jenis Kenderaan</option>
+          <option value="Kereta">Kereta</option>
+          <option value="Motosikal">Motosikal</option>
+          <option value="Van">Van</option>
+          <option value="Lain-lain">Lain-lain</option>
+        </select>
+      </div>
+    </div>
+  </template>
 
-<script>
-function tambahKenderaan() {
-    let container = document.getElementById("vehicles");
-    let div = document.createElement("div");
-    div.classList.add("vehicle");
-    div.innerHTML = `
-      <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan" required>
-      <select name="jeniskenderaan[]" required>
-        <option value="">Jenis Kenderaan</option>
-        <option value="Kereta">Kereta</option>
-        <option value="Motosikal">Motosikal</option>
-        <option value="Van">Van</option>
-      </select>
-    `;
-    container.appendChild(div);
-}
+  <script>
+    // === KONFIGURASI ===
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzUTT7h4uswLNhcwBCBFt5TK4oq32fGDqdXWCbQcMdM7u3mxddELln3DSgJZ3DayTUd/exec"; // <- Gantikan dengan URL Web App Apps Script
 
-document.getElementById("pendaftaranForm").addEventListener("submit", function(e){
-    e.preventDefault();
+    // === UTIL ===
+    const $ = (sel, el=document) => el.querySelector(sel);
+    const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
 
-    let noplat = Array.from(document.getElementsByName("noplat[]")).map(el => el.value.trim());
-    let jenis = Array.from(document.getElementsByName("jeniskenderaan[]")).map(el => el.value);
+    function toast(msg, type="success"){
+      const t = $("#toast");
+      t.textContent = msg;
+      t.className = "toast show " + (type === "success" ? "success" : "error");
+    }
 
-    let kenderaanGabung = noplat.map((p, i) => `${p} (${jenis[i]})`).join(", ");
+    function addVehicle(){
+      const tpl = $("#vehicleTemplate");
+      const clone = tpl.content.cloneNode(true);
+      $("#vehicles").appendChild(clone);
+    }
 
-    let formData = {
-        nama: this.nama.value,
-        telefon: this.telefon.value,
-        blok: this.blok.value,
-        unit: this.unit.value,
-        kenderaan: kenderaanGabung
-    };
+    function clearVehicles(){
+      $("#vehicles").innerHTML = "";
+      addVehicle();
+    }
 
-    fetch("https://script.google.com/macros/s/AKfycbwsuxmxLx73K_9CSssDcnDhA3fi4WaiKuZKiHVXBs5rGwzGK2Nug63zeBQ0Zo3DUoK4/exec", {
-        method: "POST",
-        body: JSON.stringify(formData)
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert("Pendaftaran berjaya!");
-        this.reset();
-    })
-    .catch(err => alert("Ralat: " + err));
-});
-</script>
+    function sanitizePlate(txt){
+      return (txt || "").toUpperCase().replace(/\s+/g, "");
+    }
 
+    // === INIT ===
+    addEventListener("DOMContentLoaded", () => {
+      // Mula dengan satu baris kenderaan
+      addVehicle();
+
+      $("#addVehicle").addEventListener("click", addVehicle);
+      $("#clearVehicles").addEventListener("click", clearVehicles);
+
+      $("#form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = $("#submitBtn");
+        const saving = $("#saving");
+        btn.disabled = true; saving.style.display = "inline";
+
+        try{
+          // Kumpul data asas
+          const nama = $("#nama").value.trim();
+          const telefon = $("#telefon").value.trim();
+          const blok = $("#blok").value;
+          const unit = $("#unit").value.trim();
+
+          // Kumpul kenderaan
+          const plates = $$("input[name='noplat[]']").map(i => sanitizePlate(i.value));
+          const types  = $$( "select[name='jeniskenderaan[]']").map(s => s.value);
+
+          // Validasi ringkas
+          if(!nama || !telefon || !blok || !unit) throw new Error("Sila lengkapkan maklumat asas.");
+          if(plates.some(p => !p)) throw new Error("Sila pastikan semua nombor pendaftaran diisi.");
+          if(types.some(t => !t)) throw new Error("Sila pilih jenis bagi setiap kenderaan.");
+
+          // Gabung jadi satu string
+          const senarai = plates.map((p,i) => `${p} (${types[i]})`).join(", ");
+
+          const payload = {
+            nama, telefon, blok, unit, kenderaan: senarai
+          };
+
+          // Hantar ke Apps Script
+          const res = await fetch(WEB_APP_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          // Try to parse json (if CORS allows), else fallback
+          let ok = res.ok;
+          try{
+            const j = await res.json();
+            ok = ok && j && j.status === "success";
+          }catch(_){ /* ignore json parse for opaque/no-cors */ }
+
+          if(!ok) throw new Error("Tidak dapat menyimpan. Sila cuba lagi.");
+
+          toast("Pendaftaran berjaya dihantar.");
+          // Reset borang
+          $("#form").reset();
+          clearVehicles();
+        }catch(err){
+          toast(err.message || "Ralat tidak dijangka.", "error");
+        }finally{
+          btn.disabled = false; saving.style.display = "none";
+        }
+      });
+    });
+  </script>
 </body>
 </html>
-
-
