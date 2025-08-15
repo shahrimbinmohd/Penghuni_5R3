@@ -1,23 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="ms">
 <head>
   <meta charset="UTF-8">
   <title>Pendaftaran Maklumat Penghuni</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
-    form { background: #fff; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; }
-    input, select { width: 100%; padding: 8px; margin: 5px 0; }
-    button { background: #28a745; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #218838; }
-    .vehicle { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px; background: #fafafa; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2f7;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button[type="button"] {
+      background: #007bff;
+      color: white;
+    }
+    button[type="button"]:hover {
+      background: #0069d9;
+    }
+    button[type="submit"] {
+      background: #28a745;
+      color: white;
+      width: 100%;
+      margin-top: 10px;
+    }
+    button[type="submit"]:hover {
+      background: #218838;
+    }
+    .vehicle {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      background: #fafafa;
+    }
   </style>
 </head>
 <body>
 
 <h2>Pendaftaran Maklumat Penghuni</h2>
 <form id="pendaftaranForm">
+  <label>Nama Penuh</label>
   <input type="text" name="nama" placeholder="Nama Penuh" required>
+
+  <label>Nombor Telefon</label>
   <input type="text" name="telefon" placeholder="Nombor Telefon" required>
+
+  <label>Blok</label>
   <select name="blok" required>
     <option value="">Pilih Blok</option>
     <option value="A">A</option>
@@ -26,11 +84,16 @@
     <option value="D">D</option>
     <option value="E">E</option>
   </select>
+
+  <label>Nombor Unit</label>
   <input type="text" name="unit" placeholder="Nombor Unit" required>
 
   <div id="vehicles">
     <div class="vehicle">
+      <label>No Pendaftaran Kenderaan</label>
       <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan" required>
+
+      <label>Jenis Kenderaan</label>
       <select name="jeniskenderaan[]" required>
         <option value="">Jenis Kenderaan</option>
         <option value="Kereta">Kereta</option>
@@ -41,7 +104,6 @@
   </div>
 
   <button type="button" onclick="tambahKenderaan()">+ Tambah Kenderaan</button>
-  <br><br>
   <button type="submit">Daftar</button>
 </form>
 
@@ -51,7 +113,10 @@ function tambahKenderaan() {
     let div = document.createElement("div");
     div.classList.add("vehicle");
     div.innerHTML = `
+      <label>No Pendaftaran Kenderaan</label>
       <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan" required>
+
+      <label>Jenis Kenderaan</label>
       <select name="jeniskenderaan[]" required>
         <option value="">Jenis Kenderaan</option>
         <option value="Kereta">Kereta</option>
@@ -65,27 +130,53 @@ function tambahKenderaan() {
 document.getElementById("pendaftaranForm").addEventListener("submit", function(e){
     e.preventDefault();
 
+    // Validasi manual
+    if (!this.nama.value.trim() || !this.telefon.value.trim() || !this.blok.value || !this.unit.value.trim()) {
+        alert("Sila isi semua maklumat wajib.");
+        return;
+    }
+
     let noplat = Array.from(document.getElementsByName("noplat[]")).map(el => el.value.trim());
     let jenis = Array.from(document.getElementsByName("jeniskenderaan[]")).map(el => el.value);
+
+    if (noplat.some(p => p === "") || jenis.some(j => j === "")) {
+        alert("Sila isi semua maklumat kenderaan.");
+        return;
+    }
 
     let kenderaanGabung = noplat.map((p, i) => `${p} (${jenis[i]})`).join(", ");
 
     let formData = {
-        nama: this.nama.value,
-        telefon: this.telefon.value,
+        nama: this.nama.value.trim(),
+        telefon: this.telefon.value.trim(),
         blok: this.blok.value,
-        unit: this.unit.value,
+        unit: this.unit.value.trim(),
         kenderaan: kenderaanGabung
     };
 
     fetch("https://script.google.com/macros/s/AKfycbzaQ6x1Y-cNuwa0z4957ncwfwRjkgI2vLDHUfd0Om0mzwnXsITq-20NXoIUqlOtrRAM/exec", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
     })
     .then(res => res.json())
     .then(data => {
         alert("Pendaftaran berjaya!");
-        this.reset();
+        // Reset form
+        document.getElementById("pendaftaranForm").reset();
+        document.getElementById("vehicles").innerHTML = `
+          <div class="vehicle">
+            <label>No Pendaftaran Kenderaan</label>
+            <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan" required>
+            <label>Jenis Kenderaan</label>
+            <select name="jeniskenderaan[]" required>
+              <option value="">Jenis Kenderaan</option>
+              <option value="Kereta">Kereta</option>
+              <option value="Motosikal">Motosikal</option>
+              <option value="Van">Van</option>
+            </select>
+          </div>
+        `;
     })
     .catch(err => alert("Ralat: " + err));
 });
@@ -93,4 +184,3 @@ document.getElementById("pendaftaranForm").addEventListener("submit", function(e
 
 </body>
 </html>
-
