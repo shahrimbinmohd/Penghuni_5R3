@@ -22,6 +22,9 @@
     <option value="">Pilih Blok</option>
     <option value="A">A</option>
     <option value="B">B</option>
+    <option value="C">C</option>
+    <option value="D">D</option>
+    <option value="E">E</option>
   </select>
   <input type="text" name="unit" placeholder="Nombor Unit" required>
 
@@ -75,7 +78,7 @@ document.getElementById("pendaftaranForm").addEventListener("submit", function(e
         kenderaan: kenderaanGabung
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbxXvIhdrB3WqS9NmOrfvLW5ej3sQX-Y90x-kSmsSjhmnVLG-QneqZXg4bxisibJjO8b/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbzaQ6x1Y-cNuwa0z4957ncwfwRjkgI2vLDHUfd0Om0mzwnXsITq-20NXoIUqlOtrRAM/exec", {
         method: "POST",
         body: JSON.stringify(formData)
     })
@@ -90,3 +93,4 @@ document.getElementById("pendaftaranForm").addEventListener("submit", function(e
 
 </body>
 </html>
+
