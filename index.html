@@ -121,6 +121,8 @@
 </div>
 
 <script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby28dW0T1ZcMF7WOKhBc5iHsMnvzBGa-BwKQdbNWavk2nv0sgq04R_SIZJ8-iRXcq47/exec";
+
 function tambahKenderaan() {
     let container = document.getElementById("vehicles");
     let div = document.createElement("div");
@@ -153,4 +155,15 @@ document.getElementById("pendaftaranForm").addEventListener("submit", function(e
         kenderaan: kenderaanGabung
     };
 
-    fetch("https://script.google.com/macros/s/AKfycby28dW0T1ZcMF7WOKhBc5iHsMnvzBGa-BwKQdbNWavk2nv0sgq04R_SIZJ8-iRXcq47/exec
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert("Pendaftaran berjaya!");
+        document.getElementById("pendaftaranForm").reset();
+        document.getElementById("vehicles").innerHTML = `
+          <div class="vehicle">
+            <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan"
