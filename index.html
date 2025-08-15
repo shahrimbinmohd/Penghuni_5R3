@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="ms">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Sistem Pendaftaran & Carian Penghuni</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background: linear-gradient(120deg, #f0f4ff, #e8f5e9);
       padding: 20px;
       color: #333;
@@ -13,14 +14,14 @@
     h2 {
       text-align: center;
       color: #2e7d32;
-      margin-top: 40px;
+      margin: 32px auto 16px;
     }
     form, .search-section {
       background: #fff;
-      padding: 25px;
+      padding: 24px;
       border-radius: 12px;
-      max-width: 550px;
-      margin: auto;
+      max-width: 640px;
+      margin: 12px auto;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       transition: 0.3s;
     }
@@ -28,142 +29,237 @@
       transform: translateY(-2px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.15);
     }
+    label {
+      display: block;
+      font-size: 13px;
+      margin: 8px 0 4px;
+      color: #2e7d32;
+      font-weight: 600;
+    }
     input, select {
       width: 100%;
       padding: 10px;
-      margin: 6px 0 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      margin: 0 0 12px;
+      border-radius: 8px;
+      border: 1px solid #cfcfcf;
       font-size: 14px;
       transition: 0.2s;
+      background: #fafafa;
     }
     input:focus, select:focus {
       outline: none;
       border-color: #2e7d32;
-      box-shadow: 0 0 5px rgba(46,125,50,0.5);
+      box-shadow: 0 0 0 3px rgba(46,125,50,0.15);
+      background: #fff;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
     button {
       background: #2e7d32;
       color: white;
       padding: 10px 16px;
       border: none;
-      border-radius: 6px;
+      border-radius: 10px;
       cursor: pointer;
       font-size: 14px;
-      transition: 0.3s;
+      transition: 0.25s;
     }
-    button:hover {
-      background: #1b5e20;
-      transform: scale(1.03);
-    }
+    button:hover { background: #1b5e20; transform: translateY(-1px); }
+    .btn-add { background: #0288d1; }
+    .btn-add:hover { background: #01579b; }
     .vehicle {
       border: 1px solid #c8e6c9;
       padding: 12px;
       margin-bottom: 10px;
-      border-radius: 8px;
+      border-radius: 10px;
       background: #f1f8e9;
-    }
-    .btn-add {
-      background: #0288d1;
-    }
-    .btn-add:hover {
-      background: #01579b;
     }
     .result {
       background: #e8f5e9;
       padding: 15px;
-      border-radius: 8px;
+      border-radius: 10px;
       margin-top: 15px;
       border: 1px solid #c8e6c9;
+      line-height: 1.6;
     }
+    .muted { color: #666; font-size: 12px; }
   </style>
 </head>
 <body>
 
-<h2>Pendaftaran Kenderaan Penghuni</h2>
-<form id="pendaftaranForm">
-  <input type="text" name="nama" placeholder="Nama Penuh (Contoh: Ahmad Bin Ali)" required autocomplete="name">
-  <input type="tel" name="telefon" placeholder="Nombor Telefon (Contoh: 0123456789)" pattern="[0-9]{9,13}" required>
-  
-  <select name="blok" required>
-    <option value="">Pilih Blok</option>
-    <option value="A">A</option>
-    <option value="B">B</option>
-    <option value="C">C</option>
-    <option value="D">D</option>
-    <option value="E">E</option>
-  </select>
-  
-  <input type="text" name="unit" placeholder="Nombor Unit (Contoh: 5-12)" required>
+  <h2>Pendaftaran Kenderaan Penghuni</h2>
+  <form id="pendaftaranForm" novalidate>
+    <label>Nama Penuh</label>
+    <input type="text" name="nama" placeholder="Contoh: Ahmad Bin Ali" required autocomplete="name" />
 
-  <div id="vehicles">
-    <div class="vehicle">
-      <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan" required>
-      <select name="jeniskenderaan[]" required>
-        <option value="">Jenis Kenderaan</option>
-        <option value="Kereta">Kereta</option>
-        <option value="Motosikal">Motosikal</option>
-        <option value="Van">Van</option>
-      </select>
+    <label>Nombor Telefon</label>
+    <input type="tel" name="telefon" placeholder="Contoh: 0123456789" inputmode="numeric" pattern="[0-9]{9,13}" required />
+
+    <div class="row">
+      <div>
+        <label>Blok</label>
+        <select name="blok" required>
+          <option value="">Pilih Blok</option>
+          <option>A</option><option>B</option><option>C</option><option>D</option><option>E</option>
+        </select>
+      </div>
+      <div>
+        <label>Nombor Unit</label>
+        <input type="text" name="unit" placeholder="Contoh: 5-12" required />
+      </div>
     </div>
+
+    <div id="vehicles">
+      <div class="vehicle">
+        <label>No Pendaftaran & Jenis</label>
+        <input type="text" name="noplat[]" placeholder="No Plat (cth: ABC1234)" required />
+        <select name="jeniskenderaan[]" required>
+          <option value="">Jenis Kenderaan</option>
+          <option>Kereta</option>
+          <option>Motosikal</option>
+          <option>Van</option>
+        </select>
+        <div class="muted">Tip: Taip huruf besar & nombor sahaja untuk no plat.</div>
+      </div>
+    </div>
+
+    <button type="button" class="btn-add" onclick="tambahKenderaan()">+ Tambah Kenderaan</button>
+    <br><br>
+    <button type="submit">Daftar</button>
+  </form>
+
+  <h2>Carian Nombor Plat</h2>
+  <div class="search-section">
+    <label>Cari Nombor Plat</label>
+    <input type="text" id="searchPlate" placeholder="Contoh: ABC1234" />
+    <button onclick="cariPlat()">Cari</button>
+    <div id="result" class="result" style="display:none;"></div>
   </div>
 
-  <button type="button" class="btn-add" onclick="tambahKenderaan()">+ Tambah Kenderaan</button>
-  <br><br>
-  <button type="submit">Daftar</button>
-</form>
-
-<h2>Carian Nombor Plat</h2>
-<div class="search-section">
-  <input type="text" id="searchPlate" placeholder="Masukkan No Plat (Contoh: ABC1234)">
-  <button onclick="cariPlat()">Cari</button>
-  <div id="result" class="result" style="display:none;"></div>
-</div>
-
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby28dW0T1ZcMF7WOKhBc5iHsMnvzBGa-BwKQdbNWavk2nv0sgq04R_SIZJ8-iRXcq47/exec";
+/** URL Web App (Google Apps Script) */
+const webAppUrl = "https://script.google.com/macros/s/AKfycbxIr90Ed-2rcLJm4uRFc0CCByUJ1vXJ-7ooaomCjk8oPFg6HIIIj-otcaG6_u6YnW4-/exec";
+
+/** Auto-uppercase untuk semua input no plat (termasuk dinamik) */
+document.addEventListener("input", (e) => {
+  if (e.target && e.target.name === "noplat[]") {
+    e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  }
+});
+/** Auto-uppercase untuk kotak carian plat */
+document.getElementById("searchPlate").addEventListener("input", (e) => {
+  e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+});
 
 function tambahKenderaan() {
-    let container = document.getElementById("vehicles");
-    let div = document.createElement("div");
-    div.classList.add("vehicle");
-    div.innerHTML = `
-      <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan" required>
-      <select name="jeniskenderaan[]" required>
-        <option value="">Jenis Kenderaan</option>
-        <option value="Kereta">Kereta</option>
-        <option value="Motosikal">Motosikal</option>
-        <option value="Van">Van</option>
-      </select>
-    `;
-    container.appendChild(div);
+  const container = document.getElementById("vehicles");
+  const div = document.createElement("div");
+  div.classList.add("vehicle");
+  div.innerHTML = `
+    <label>No Pendaftaran & Jenis</label>
+    <input type="text" name="noplat[]" placeholder="No Plat (cth: ABC1234)" required />
+    <select name="jeniskenderaan[]" required>
+      <option value="">Jenis Kenderaan</option>
+      <option>Kereta</option>
+      <option>Motosikal</option>
+      <option>Van</option>
+    </select>
+    <div class="muted">Tip: Taip huruf besar & nombor sahaja untuk no plat.</div>
+  `;
+  container.appendChild(div);
 }
 
-document.getElementById("pendaftaranForm").addEventListener("submit", function(e){
-    e.preventDefault();
+document.getElementById("pendaftaranForm").addEventListener("submit", async function(e){
+  e.preventDefault();
 
-    let noplat = Array.from(document.getElementsByName("noplat[]")).map(el => el.value.trim());
-    let jenis = Array.from(document.getElementsByName("jeniskenderaan[]")).map(el => el.value);
+  // Validasi ringkas
+  if (!this.reportValidity()) return;
 
-    let kenderaanGabung = noplat.map((p, i) => `${p} (${jenis[i]})`).join(", ");
+  const noplat = Array.from(document.getElementsByName("noplat[]")).map(el => el.value.trim().toUpperCase());
+  const jenis  = Array.from(document.getElementsByName("jeniskenderaan[]")).map(el => el.value);
+  const kenderaanGabung = noplat.map((p, i) => `${p} (${jenis[i] || "-"})`).join(", ");
 
-    let formData = {
-        nama: this.nama.value,
-        telefon: this.telefon.value,
-        blok: this.blok.value,
-        unit: this.unit.value,
-        kenderaan: kenderaanGabung
-    };
+  const formData = {
+    nama: this.nama.value.trim(),
+    telefon: this.telefon.value.trim(),
+    blok: this.blok.value,
+    unit: this.unit.value.trim(),
+    kenderaan: kenderaanGabung
+  };
 
-    fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: { "Content-Type": "application/json" }
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert("Pendaftaran berjaya!");
-        document.getElementById("pendaftaranForm").reset();
-        document.getElementById("vehicles").innerHTML = `
-          <div class="vehicle">
-            <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan"
+  try {
+    const res = await fetch(webAppUrl, {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: { "Content-Type": "application/json" }
+    });
+    const data = await res.json();
+    if (data.status === "success") {
+      alert("Pendaftaran berjaya!");
+      this.reset();
+      // Reset semula seksyen kenderaan ke 1 medan asal
+      document.getElementById("vehicles").innerHTML = `
+        <div class="vehicle">
+          <label>No Pendaftaran & Jenis</label>
+          <input type="text" name="noplat[]" placeholder="No Plat (cth: ABC1234)" required />
+          <select name="jeniskenderaan[]" required>
+            <option value="">Jenis Kenderaan</option>
+            <option>Kereta</option>
+            <option>Motosikal</option>
+            <option>Van</option>
+          </select>
+          <div class="muted">Tip: Taip huruf besar & nombor sahaja untuk no plat.</div>
+        </div>
+      `;
+    } else {
+      alert("Ralat semasa pendaftaran. Sila cuba lagi.");
+    }
+  } catch (err) {
+    alert("Ralat rangkaian: " + err.message);
+  }
+});
+
+async function cariPlat() {
+  const plate = document.getElementById("searchPlate").value.trim().toUpperCase();
+  const resultDiv = document.getElementById("result");
+  if (!plate) {
+    alert("Sila masukkan nombor plat.");
+    return;
+  }
+  try {
+    const res = await fetch(webAppUrl + "?plate=" + encodeURIComponent(plate));
+    const data = await res.json();
+    if (data.status === "ok") {
+      resultDiv.innerHTML = `
+        <b>Nama:</b> ${escapeHtml(data.nama)}<br>
+        <b>Telefon:</b> ${escapeHtml(data.telefon)}<br>
+        <b>Blok & Unit:</b> ${escapeHtml(data.blok)}-${escapeHtml(data.unit)}<br>
+        <b>Kenderaan:</b> ${escapeHtml(data.kenderaan)}
+      `;
+    } else if (data.status === "not_found") {
+      resultDiv.innerHTML = "No plat tidak dijumpai.";
+    } else {
+      resultDiv.innerHTML = "Ralat carian. Sila cuba lagi.";
+    }
+    resultDiv.style.display = "block";
+  } catch (err) {
+    alert("Ralat rangkaian: " + err.message);
+  }
+}
+
+/** Lindung XSS asas bila render teks */
+function escapeHtml(str) {
+  return String(str || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+</script>
+
+</body>
+</html>
