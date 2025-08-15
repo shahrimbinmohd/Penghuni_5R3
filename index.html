@@ -4,34 +4,47 @@
   <meta charset="UTF-8">
   <title>Pendaftaran Maklumat Penghuni</title>
   <style>
-    /* (guna CSS sama seperti awak ada) */
-    body{font-family:Arial;background:#eef2f7;padding:20px}
-    form{background:#fff;padding:20px;border-radius:8px;max-width:500px;margin:auto;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
-    label{font-weight:bold;display:block;margin-top:10px}
-    input,select{width:100%;padding:8px;margin:5px 0 10px;border:1px solid #ccc;border-radius:4px}
-    button{padding:10px;border:none;border-radius:5px;cursor:pointer;font-size:15px}
-    button[type="button"]{background:#007bff;color:#fff}
-    button[type="submit"]{background:#28a745;color:#fff;width:100%;margin-top:10px}
-    .vehicle{border:1px solid #ccc;padding:10px;margin-bottom:10px;border-radius:5px;background:#fafafa}
+    body { font-family: Arial, sans-serif; background: #eef2f7; padding: 20px; }
+    h2 { text-align: center; color: #333; }
+    form { background: #fff; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    label { font-weight: bold; margin-top: 10px; display: block; }
+    input, select { width: 100%; padding: 8px; margin: 5px 0 10px; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 15px; }
+    button[type="button"] { background: #007bff; color: white; }
+    button[type="button"]:hover { background: #0069d9; }
+    button[type="submit"] { background: #28a745; color: white; width: 100%; margin-top: 10px; }
+    button[type="submit"]:hover { background: #218838; }
+    .vehicle { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px; background: #fafafa; }
   </style>
 </head>
 <body>
+
 <h2>Pendaftaran Maklumat Penghuni</h2>
 <form id="pendaftaranForm">
-  <label>Nama Penuh</label><input type="text" name="nama" placeholder="Nama Penuh" required>
-  <label>Nombor Telefon</label><input type="text" name="telefon" placeholder="Nombor Telefon" required>
+  <label>Nama Penuh</label>
+  <input type="text" name="nama" required>
+
+  <label>Nombor Telefon</label>
+  <input type="text" name="telefon" required>
+
   <label>Blok</label>
   <select name="blok" required>
     <option value="">Pilih Blok</option>
-    <option value="A">A</option><option value="B">B</option><option value="C">C</option>
-    <option value="D">D</option><option value="E">E</option>
+    <option value="A">A</option>
+    <option value="B">B</option>
+    <option value="C">C</option>
+    <option value="D">D</option>
+    <option value="E">E</option>
   </select>
-  <label>Nombor Unit</label><input type="text" name="unit" placeholder="Nombor Unit" required>
+
+  <label>Nombor Unit</label>
+  <input type="text" name="unit" required>
 
   <div id="vehicles">
     <div class="vehicle">
       <label>No Pendaftaran Kenderaan</label>
-      <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan" required>
+      <input type="text" name="noplat[]" required>
+
       <label>Jenis Kenderaan</label>
       <select name="jeniskenderaan[]" required>
         <option value="">Jenis Kenderaan</option>
@@ -47,95 +60,66 @@
 </form>
 
 <script>
-function tambahKenderaan(){
-  let container = document.getElementById("vehicles");
-  let div = document.createElement("div");
-  div.className = "vehicle";
-  div.innerHTML = `
-    <label>No Pendaftaran Kenderaan</label>
-    <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan" required>
-    <label>Jenis Kenderaan</label>
-    <select name="jeniskenderaan[]" required>
-      <option value="">Jenis Kenderaan</option>
-      <option value="Kereta">Kereta</option>
-      <option value="Motosikal">Motosikal</option>
-      <option value="Van">Van</option>
-    </select>
-  `;
-  container.appendChild(div);
+function tambahKenderaan() {
+    let container = document.getElementById("vehicles");
+    let div = document.createElement("div");
+    div.classList.add("vehicle");
+    div.innerHTML = `
+      <label>No Pendaftaran Kenderaan</label>
+      <input type="text" name="noplat[]" required>
+
+      <label>Jenis Kenderaan</label>
+      <select name="jeniskenderaan[]" required>
+        <option value="">Jenis Kenderaan</option>
+        <option value="Kereta">Kereta</option>
+        <option value="Motosikal">Motosikal</option>
+        <option value="Van">Van</option>
+      </select>
+    `;
+    container.appendChild(div);
 }
 
-document.getElementById("pendaftaranForm").addEventListener("submit", function(e){
-  e.preventDefault();
+document.getElementById("pendaftaranForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-  // Validasi ringkas
-  if (!this.nama.value.trim() || !this.telefon.value.trim() || !this.blok.value || !this.unit.value.trim()){
-    alert("Sila isi semua maklumat wajib.");
-    return;
-  }
+    let formData = {
+        nama: this.nama.value.trim(),
+        telefon: this.telefon.value.trim(),
+        blok: this.blok.value,
+        unit: this.unit.value.trim(),
+        kenderaan: Array.from(document.getElementsByName("noplat[]"))
+                        .map((el, i) => `${el.value.trim()} (${document.getElementsByName("jeniskenderaan[]")[i].value})`)
+                        .join(", ")
+    };
 
-  let noplat = Array.from(document.getElementsByName("noplat[]")).map(x => x.value.trim());
-  let jenis = Array.from(document.getElementsByName("jeniskenderaan[]")).map(x => x.value);
-  if (noplat.some(p=>p==="") || jenis.some(j=>j==="")){
-    alert("Sila isi semua maklumat kenderaan.");
-    return;
-  }
-
-  // Gabungkan kenderaan seperti sebelum ini (boleh juga hantar array jika mahu)
-  let kenderaanGabung = noplat.map((p,i)=> `${p} (${jenis[i]})`).join(", ");
-
-  let formData = {
-    nama: this.nama.value.trim(),
-    telefon: this.telefon.value.trim(),
-    blok: this.blok.value,
-    unit: this.unit.value.trim(),
-    kenderaan: kenderaanGabung
-  };
-
-  // PENTING: hantar sebagai application/x-www-form-urlencoded (elak preflight CORS)
-  let payload = new URLSearchParams();
-  payload.append('data', JSON.stringify(formData));
-
-  fetch("https://script.google.com/macros/s/AKfycbxL2fAw6FnJJsNF2js5vdt2fUCs6-tB2OT0i2HBZv3dFji4VOSobT57UXdxV6fsqS4/exec", {
-    method: "POST",
-    body: payload
-  })
-  .then(response => {
-    // kadang server reply text — cuba parse JSON, kalau gagal return text
-    return response.text().then(text=>{
-      try { return JSON.parse(text); } catch(e){ return {status:'ok', raw:text}; }
-    });
-  })
-  .then(data => {
-    if (data && data.status === "success"){
-      alert("Pendaftaran berjaya!");
-    } else if (data && data.status === "error"){
-      alert("Ralat server: " + (data.message||JSON.stringify(data)));
-    } else {
-      alert("Terima balasan: " + JSON.stringify(data));
-    }
-
-    // reset
-    document.getElementById("pendaftaranForm").reset();
-    document.getElementById("vehicles").innerHTML = `
-      <div class="vehicle">
-        <label>No Pendaftaran Kenderaan</label>
-        <input type="text" name="noplat[]" placeholder="No Pendaftaran Kenderaan" required>
-        <label>Jenis Kenderaan</label>
-        <select name="jeniskenderaan[]" required>
-          <option value="">Jenis Kenderaan</option>
-          <option value="Kereta">Kereta</option>
-          <option value="Motosikal">Motosikal</option>
-          <option value="Van">Van</option>
-        </select>
-      </div>
-    `;
-  })
-  .catch(err => {
-    console.error(err);
-    alert("Ralat fetch: " + err);
-  });
+    google.script.run
+      .withSuccessHandler(function(res) {
+        if (res.status === "ok") {
+          alert(res.message);
+          document.getElementById("pendaftaranForm").reset();
+          document.getElementById("vehicles").innerHTML = `
+            <div class="vehicle">
+              <label>No Pendaftaran Kenderaan</label>
+              <input type="text" name="noplat[]" required>
+              <label>Jenis Kenderaan</label>
+              <select name="jeniskenderaan[]" required>
+                <option value="">Jenis Kenderaan</option>
+                <option value="Kereta">Kereta</option>
+                <option value="Motosikal">Motosikal</option>
+                <option value="Van">Van</option>
+              </select>
+            </div>
+          `;
+        } else {
+          alert("Ralat: " + res.message);
+        }
+      })
+      .withFailureHandler(function(err) {
+        alert("Ralat: " + err);
+      })
+      .simpanData(formData);
 });
 </script>
+
 </body>
 </html>
