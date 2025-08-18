@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sistem Pendaftaran & Carian Penghuni</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Sistem Pendaftaran & Carian Penghuni 5R3</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(120deg, #f0f4ff, #d9e4ff);
+      font-family: Arial, sans-serif;
+      background: #f0f4f9;
+      margin: 0;
       padding: 20px;
     }
     h2 {
@@ -17,102 +18,110 @@
     form, .search-box {
       background: #fff;
       padding: 20px;
-      border-radius: 10px;
       margin: 20px auto;
+      border-radius: 8px;
       max-width: 500px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    label { display: block; margin-bottom: 8px; font-weight: bold; }
-    input, select, button {
-      width: 100%; padding: 10px; margin-bottom: 15px;
-      border: 1px solid #ccc; border-radius: 6px;
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
     button {
-      background: #3498db; color: #fff; border: none; cursor: pointer;
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
-    button:hover { background: #2980b9; }
+    button:hover {
+      background: #2980b9;
+    }
     #result {
       margin-top: 20px;
       padding: 15px;
       background: #ecf0f1;
-      border-radius: 8px;
+      border-radius: 5px;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h2>Sistem Pendaftaran & Carian Penghuni</h2>
+  <h2>Sistem Pendaftaran & Carian Penghuni 5R3</h2>
 
   <!-- Borang Pendaftaran -->
-  <form id="dataForm">
+  <form id="registerForm">
+    <h3>Pendaftaran Maklumat Penghuni</h3>
     <label>Nama:</label>
     <input type="text" name="nama" required>
-    
-    <label>No. Rumah:</label>
-    <input type="text" name="noRumah" required>
-    
-    <label>No. Plat Kenderaan:</label>
-    <input type="text" name="noPlat" required>
-    
+    <label>No Telefon:</label>
+    <input type="text" name="telefon" required>
+    <label>No Rumah:</label>
+    <input type="text" name="rumah" required>
+    <label>No Plat Kenderaan:</label>
+    <input type="text" name="plat" required>
     <label>Jenis Kenderaan:</label>
-    <select name="jenis" required>
-      <option value="Kereta">Kereta</option>
-      <option value="Motosikal">Motosikal</option>
-      <option value="Lain-lain">Lain-lain</option>
-    </select>
-    
+    <input type="text" name="kenderaan" required>
     <button type="submit">Hantar</button>
   </form>
 
-  <!-- Carian Data -->
+  <!-- Carian -->
   <div class="search-box">
-    <label>Carian (No. Plat / Nama / Jenis Kenderaan):</label>
-    <input type="text" id="searchInput" placeholder="Contoh: VBN1234">
+    <h3>Carian Penghuni</h3>
+    <label>Masukkan No Plat / Nama / Jenis Kenderaan:</label>
+    <input type="text" id="searchInput">
     <button onclick="searchData()">Cari</button>
   </div>
 
+  <!-- Paparan Hasil -->
   <div id="result"></div>
 
   <script>
-    // Fungsi Hantar Data
-    document.getElementById("dataForm").addEventListener("submit", function(e){
-      e.preventDefault();
-      const formData = new FormData(this);
-      const data = {};
-      formData.forEach((value, key) => data[key] = value);
+    const scriptURL = "https://script.google.com/macros/s/AKfycbztxueJke65-EW9UdPhbLOVvnD30ZExKdhakSzdKFRzy-fDacRwPX4kdOqlLgrNVkP4/exec"; // <-- ganti dengan URL Web App Apps Script
 
-      fetch("https://script.google.com/macros/s/AKfycbwMYRUyMLJjFP0qpKV1tZXEZnLStL9F13kscB7EUhJUlPS1rfYkClNgEQCK5mRkMWdq/exec", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(res => res.text())
-      .then(txt => alert(txt));
-      
-      this.reset();
+    // Hantar data pendaftaran
+    document.getElementById("registerForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      fetch(scriptURL, { method: "POST", body: formData })
+        .then(res => res.text())
+        .then(txt => alert("Pendaftaran Berjaya!"))
+        .catch(err => alert("Ralat: " + err));
     });
 
-    // Fungsi Carian Data
-    function searchData(){
+    // Cari data
+    function searchData() {
       const query = document.getElementById("searchInput").value.trim();
-      if(query === "") { alert("Sila masukkan kata carian"); return; }
-
-      fetch(`https://script.google.com/macros/s/AKfycbwMYRUyMLJjFP0qpKV1tZXEZnLStL9F13kscB7EUhJUlPS1rfYkClNgEQCK5mRkMWdq/exec?action=search&query=${encodeURIComponent(query)}`)
-      .then(res => res.json())
-      .then(data => {
-        let resultBox = document.getElementById("result");
-        if(data.length > 0){
-          let html = "<h3>Hasil Carian:</h3>";
-          data.forEach(item => {
-            html += `<p><b>No Rumah:</b> ${item.noRumah}<br>
-                     <b>Nama:</b> ${item.nama}<br>
-                     <b>No. Plat:</b> ${item.noPlat}<br>
-                     <b>Jenis:</b> ${item.jenis}</p><hr>`;
-          });
-          resultBox.innerHTML = html;
-        } else {
-          resultBox.innerHTML = "<p>Tiada rekod dijumpai.</p>";
-        }
-      });
+      if (!query) { alert("Sila masukkan kata carian!"); return; }
+      
+      fetch(`${scriptURL}?action=search&query=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(data => {
+          const resultBox = document.getElementById("result");
+          if (data.status === "success") {
+            resultBox.innerHTML = `
+              <b>Nama:</b> ${data.nama} <br>
+              <b>No Telefon:</b> ${data.telefon} <br>
+              <b>No Rumah:</b> ${data.rumah} <br>
+              <b>No Plat:</b> ${data.plat} <br>
+              <b>Jenis Kenderaan:</b> ${data.kenderaan}
+            `;
+            resultBox.style.display = "block";
+          } else {
+            resultBox.innerHTML = "❌ Tiada rekod dijumpai.";
+            resultBox.style.display = "block";
+          }
+        });
     }
   </script>
 </body>
