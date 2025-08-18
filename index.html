@@ -83,33 +83,27 @@ document.getElementById("pendaftaranForm").addEventListener("submit", function(e
     e.preventDefault();
 
     let formData = {
-        nama: this.nama.value.trim(),
-        telefon: this.telefon.value.trim(),
-        blok: this.blok.value,
-        unit: this.unit.value.trim(),
+        nama: this.querySelector('[name="nama"]').value.trim(),
+        telefon: this.querySelector('[name="telefon"]').value.trim(),
+        blok: this.querySelector('[name="blok"]').value,
+        unit: this.querySelector('[name="unit"]').value.trim(),
         kenderaan: Array.from(document.getElementsByName("noplat[]"))
                         .map((el, i) => `${el.value.trim()} (${document.getElementsByName("jeniskenderaan[]")[i].value})`)
                         .join(", ")
     };
+
+    if (!formData.nama || !formData.telefon || !formData.blok || !formData.unit || !formData.kenderaan) {
+        alert("Sila lengkapkan semua maklumat sebelum daftar.");
+        return;
+    }
 
     google.script.run
       .withSuccessHandler(function(res) {
         if (res.status === "ok") {
           alert(res.message);
           document.getElementById("pendaftaranForm").reset();
-          document.getElementById("vehicles").innerHTML = `
-            <div class="vehicle">
-              <label>No Pendaftaran Kenderaan</label>
-              <input type="text" name="noplat[]" required>
-              <label>Jenis Kenderaan</label>
-              <select name="jeniskenderaan[]" required>
-                <option value="">Jenis Kenderaan</option>
-                <option value="Kereta">Kereta</option>
-                <option value="Motosikal">Motosikal</option>
-                <option value="Van">Van</option>
-              </select>
-            </div>
-          `;
+          document.getElementById("vehicles").innerHTML = "";
+          tambahKenderaan(); // reset with one vehicle field
         } else {
           alert("Ralat: " + res.message);
         }
