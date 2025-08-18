@@ -69,7 +69,7 @@
 
   <script>
     // URL Web App Google Apps Script (TUKAR dengan URL selepas deploy!)
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_g4dyq8t-DV6UYuvg7KqF7Tq0A0qvrAkGbXlgMEwVGb0UQ8HvbUls9MBvi9dZ1c5O/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyv3A6nSqRGriIVAx_Gu1S-Ce7UulpqnLLrBS6AAxScF8HN54Qg1qVqiF7P-lpOVBe/exec";
 
     // Fungsi Hantar Data
     document.getElementById("dataForm").addEventListener("submit", function(e){
@@ -77,10 +77,14 @@
       const formData = new FormData(this);
 
       fetch(SCRIPT_URL, { method: "POST", body: formData })
-        .then(res => res.text())
-        .then(txt => alert(txt));
-
-      this.reset();
+    .then(res => res.text())
+    .then(txt => {
+      alert("Respon: " + txt);
+      document.getElementById("dataForm").reset();
+    })
+    .catch(err => {
+      alert("Fetch error: " + err);
+      console.error(err);
     });
 
     // Fungsi Carian Data
@@ -113,3 +117,4 @@
   </script>
 </body>
 </html>
+
