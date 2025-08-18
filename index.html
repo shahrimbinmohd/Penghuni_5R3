@@ -73,26 +73,27 @@
 
     // Fungsi Hantar Data
     document.getElementById("dataForm").addEventListener("submit", function(e){
-      e.preventDefault();
-      const formData = new FormData(this);
+    e.preventDefault();
+    const formData = new FormData(this);
 
-      fetch(SCRIPT_URL, { method: "POST", body: formData })
-    .then(res => res.text())
-    .then(txt => {
-      alert("Respon: " + txt);
-      document.getElementById("dataForm").reset();
-    })
-    .catch(err => {
-      alert("Fetch error: " + err);
-      console.error(err);
-    });
+    fetch(SCRIPT_URL, { method: "POST", body: formData })
+      .then(res => res.text())
+      .then(txt => {
+        alert("Respon: " + txt);
+        document.getElementById("dataForm").reset();
+      })
+      .catch(err => {
+        alert("Fetch error: " + err);
+        console.error(err);
+      });
+  });
 
-    // Fungsi Carian Data
-    function searchData(){
-      const query = document.getElementById("searchInput").value.trim();
-      if(query === "") { alert("Sila masukkan kata carian"); return; }
+  // Fungsi Carian Data  ✅ letak di luar block submit
+  function searchData(){
+    const query = document.getElementById("searchInput").value.trim();
+    if(query === "") { alert("Sila masukkan kata carian"); return; }
 
-      fetch(`${SCRIPT_URL}?action=search&query=${encodeURIComponent(query)}`)
+    fetch(`${SCRIPT_URL}?action=search&query=${encodeURIComponent(query)}`)
       .then(res => res.json())
       .then(data => {
         let resultBox = document.getElementById("result");
@@ -112,9 +113,14 @@
         } else {
           resultBox.innerHTML = "<p>Tiada rekod dijumpai.</p>";
         }
+      })
+      .catch(err => {
+        alert("Fetch search error: " + err);
+        console.error(err);
       });
-    }
-  </script>
+  }
+</script>
 </body>
 </html>
+
 
