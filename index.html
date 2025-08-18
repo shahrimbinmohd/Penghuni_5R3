@@ -85,7 +85,7 @@
       const data = {};
       formData.forEach((value, key) => data[key] = value);
 
-      fetch("https://script.google.com/macros/s/AKfycbyQ3645siR8L6T0H_DzoVSq_hcb20BaZipiH81uJZLxJrhTxKjlbMu865qQTAYMVR0J/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbwXrJ3XfpEC0iEMvd7qzMb6rrHoHgpyG23sI__iKSlnaYZ9-fRixEciK4gHdow8LyBP/exec", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" }
@@ -101,7 +101,7 @@
       const query = document.getElementById("searchInput").value.trim();
       if(query === "") { alert("Sila masukkan kata carian"); return; }
 
-      fetch(`https://script.google.com/macros/s/AKfycbyQ3645siR8L6T0H_DzoVSq_hcb20BaZipiH81uJZLxJrhTxKjlbMu865qQTAYMVR0J/exec?action=search&query=${encodeURIComponent(query)}`)
+      fetch(`https://script.google.com/macros/s/AKfycbwXrJ3XfpEC0iEMvd7qzMb6rrHoHgpyG23sI__iKSlnaYZ9-fRixEciK4gHdow8LyBP/exec?action=search&query=${encodeURIComponent(query)}`)
       .then(res => res.json())
       .then(data => {
         let resultBox = document.getElementById("result");
@@ -125,4 +125,5 @@
   </script>
 </body>
 </html>
+
 
