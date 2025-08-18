@@ -1,119 +1,119 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <title>Pendaftaran Maklumat Penghuni</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sistem Pendaftaran & Carian Penghuni</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #eef2f7; padding: 20px; }
-    h2 { text-align: center; color: #333; }
-    form { background: #fff; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    label { font-weight: bold; margin-top: 10px; display: block; }
-    input, select { width: 100%; padding: 8px; margin: 5px 0 10px; border: 1px solid #ccc; border-radius: 4px; }
-    button { padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 15px; }
-    button[type="button"] { background: #007bff; color: white; }
-    button[type="button"]:hover { background: #0069d9; }
-    button[type="submit"] { background: #28a745; color: white; width: 100%; margin-top: 10px; }
-    button[type="submit"]:hover { background: #218838; }
-    .vehicle { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px; background: #fafafa; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, #f0f4ff, #d9e4ff);
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    form, .search-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px auto;
+      max-width: 500px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    label { display: block; margin-bottom: 8px; font-weight: bold; }
+    input, select, button {
+      width: 100%; padding: 10px; margin-bottom: 15px;
+      border: 1px solid #ccc; border-radius: 6px;
+    }
+    button {
+      background: #3498db; color: #fff; border: none; cursor: pointer;
+    }
+    button:hover { background: #2980b9; }
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #ecf0f1;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
+  <h2>Sistem Pendaftaran & Carian Penghuni</h2>
 
-<h2>Pendaftaran Maklumat Penghuni</h2>
-<form id="pendaftaranForm">
-  <label>Nama Penuh</label>
-  <input type="text" name="nama" required>
+  <!-- Borang Pendaftaran -->
+  <form id="dataForm">
+    <label>Nama:</label>
+    <input type="text" name="nama" required>
+    
+    <label>No. Rumah:</label>
+    <input type="text" name="noRumah" required>
+    
+    <label>No. Plat Kenderaan:</label>
+    <input type="text" name="noPlat" required>
+    
+    <label>Jenis Kenderaan:</label>
+    <select name="jenis" required>
+      <option value="Kereta">Kereta</option>
+      <option value="Motosikal">Motosikal</option>
+      <option value="Lain-lain">Lain-lain</option>
+    </select>
+    
+    <button type="submit">Hantar</button>
+  </form>
 
-  <label>Nombor Telefon</label>
-  <input type="text" name="telefon" required>
-
-  <label>Blok</label>
-  <select name="blok" required>
-    <option value="">Pilih Blok</option>
-    <option value="A">A</option>
-    <option value="B">B</option>
-    <option value="C">C</option>
-    <option value="D">D</option>
-    <option value="E">E</option>
-  </select>
-
-  <label>Nombor Unit</label>
-  <input type="text" name="unit" required>
-
-  <div id="vehicles">
-    <div class="vehicle">
-      <label>No Pendaftaran Kenderaan</label>
-      <input type="text" name="noplat[]" required>
-
-      <label>Jenis Kenderaan</label>
-      <select name="jeniskenderaan[]" required>
-        <option value="">Jenis Kenderaan</option>
-        <option value="Kereta">Kereta</option>
-        <option value="Motosikal">Motosikal</option>
-        <option value="Van">Van</option>
-      </select>
-    </div>
+  <!-- Carian Data -->
+  <div class="search-box">
+    <label>Carian (No. Plat / Nama / Jenis Kenderaan):</label>
+    <input type="text" id="searchInput" placeholder="Contoh: VBN1234">
+    <button onclick="searchData()">Cari</button>
   </div>
 
-  <button type="button" onclick="tambahKenderaan()">+ Tambah Kenderaan</button>
-  <button type="submit">Daftar</button>
-</form>
+  <div id="result"></div>
 
-<script>
-function tambahKenderaan() {
-    let container = document.getElementById("vehicles");
-    let div = document.createElement("div");
-    div.classList.add("vehicle");
-    div.innerHTML = `
-      <label>No Pendaftaran Kenderaan</label>
-      <input type="text" name="noplat[]" required>
+  <script>
+    // Fungsi Hantar Data
+    document.getElementById("dataForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = {};
+      formData.forEach((value, key) => data[key] = value);
 
-      <label>Jenis Kenderaan</label>
-      <select name="jeniskenderaan[]" required>
-        <option value="">Jenis Kenderaan</option>
-        <option value="Kereta">Kereta</option>
-        <option value="Motosikal">Motosikal</option>
-        <option value="Van">Van</option>
-      </select>
-    `;
-    container.appendChild(div);
-}
+      fetch("https://script.google.com/macros/s/AKfycbwMYRUyMLJjFP0qpKV1tZXEZnLStL9F13kscB7EUhJUlPS1rfYkClNgEQCK5mRkMWdq/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => res.text())
+      .then(txt => alert(txt));
+      
+      this.reset();
+    });
 
-document.getElementById("pendaftaranForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+    // Fungsi Carian Data
+    function searchData(){
+      const query = document.getElementById("searchInput").value.trim();
+      if(query === "") { alert("Sila masukkan kata carian"); return; }
 
-    let formData = {
-        nama: this.querySelector('[name="nama"]').value.trim(),
-        telefon: this.querySelector('[name="telefon"]').value.trim(),
-        blok: this.querySelector('[name="blok"]').value,
-        unit: this.querySelector('[name="unit"]').value.trim(),
-        kenderaan: Array.from(document.getElementsByName("noplat[]"))
-                        .map((el, i) => `${el.value.trim()} (${document.getElementsByName("jeniskenderaan[]")[i].value})`)
-                        .join(", ")
-    };
-
-    if (!formData.nama || !formData.telefon || !formData.blok || !formData.unit || !formData.kenderaan) {
-        alert("Sila lengkapkan semua maklumat sebelum daftar.");
-        return;
-    }
-
-    google.script.run
-      .withSuccessHandler(function(res) {
-        if (res.status === "ok") {
-          alert(res.message);
-          document.getElementById("pendaftaranForm").reset();
-          document.getElementById("vehicles").innerHTML = "";
-          tambahKenderaan(); // reset with one vehicle field
+      fetch(`https://script.google.com/macros/s/AKfycbwMYRUyMLJjFP0qpKV1tZXEZnLStL9F13kscB7EUhJUlPS1rfYkClNgEQCK5mRkMWdq/exec?action=search&query=${encodeURIComponent(query)}`)
+      .then(res => res.json())
+      .then(data => {
+        let resultBox = document.getElementById("result");
+        if(data.length > 0){
+          let html = "<h3>Hasil Carian:</h3>";
+          data.forEach(item => {
+            html += `<p><b>No Rumah:</b> ${item.noRumah}<br>
+                     <b>Nama:</b> ${item.nama}<br>
+                     <b>No. Plat:</b> ${item.noPlat}<br>
+                     <b>Jenis:</b> ${item.jenis}</p><hr>`;
+          });
+          resultBox.innerHTML = html;
         } else {
-          alert("Ralat: " + res.message);
+          resultBox.innerHTML = "<p>Tiada rekod dijumpai.</p>";
         }
-      })
-      .withFailureHandler(function(err) {
-        alert("Ralat: " + err);
-      })
-      .simpanData(formData);
-});
-</script>
-
+      });
+    }
+  </script>
 </body>
 </html>
