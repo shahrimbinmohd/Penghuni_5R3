@@ -10,10 +10,16 @@
       background: linear-gradient(120deg, #f0f4ff, #d9e4ff);
       padding: 20px;
     }
-    h2 { text-align: center; color: #2c3e50; }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
     form, .search-box {
-      background: #fff; padding: 20px; border-radius: 10px;
-      margin: 20px auto; max-width: 500px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px auto;
+      max-width: 500px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     label { display: block; margin-bottom: 8px; font-weight: bold; }
@@ -26,8 +32,10 @@
     }
     button:hover { background: #2980b9; }
     #result {
-      margin-top: 20px; padding: 15px;
-      background: #ecf0f1; border-radius: 8px;
+      margin-top: 20px;
+      padding: 15px;
+      background: #ecf0f1;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -41,19 +49,12 @@
     
     <label>No. Telefon:</label>
     <input type="text" name="telefon" required>
-    
+
     <label>No. Rumah:</label>
     <input type="text" name="rumah" required>
-    
+
     <label>Blok:</label>
-    <select name="blok" required>
-      <option value="">-- Pilih Blok --</option>
-      <option value="A">A</option>
-      <option value="B">B</option>
-      <option value="C">C</option>
-      <option value="D">D</option>
-      <option value="E">E</option>
-    </select>
+    <input type="text" name="blok" required>
     
     <label>No. Plat Kenderaan:</label>
     <input type="text" name="plat" required>
@@ -70,14 +71,17 @@
 
   <!-- Carian Data -->
   <div class="search-box">
-    <label>Carian (Nama / No. Telefon / Rumah / Blok / Plat / Kenderaan):</label>
-    <input type="text" id="searchInput" placeholder="Contoh: VBN1234 atau Blok B">
+    <label>Carian (Nama / Rumah / Blok / Plat / Jenis):</label>
+    <input type="text" id="searchInput" placeholder="Contoh: VGS1497 atau Blok B">
     <button onclick="searchData()">Cari</button>
   </div>
 
   <div id="result"></div>
 
   <script>
+    // URL Web App Google Apps Script (tukar dengan URL sebenar anda!)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-rvQs0CkW3NcQ5ClHVhxa827DI7zYuoh2Sd5mpwACSMKcaPPbDTwheRqAHOOdBIee/exec";
+
     // Fungsi Hantar Data
     document.getElementById("dataForm").addEventListener("submit", function(e){
       e.preventDefault();
@@ -85,7 +89,7 @@
       const data = {};
       formData.forEach((value, key) => data[key] = value);
 
-      fetch("https://script.google.com/macros/s/AKfycbwXrJ3XfpEC0iEMvd7qzMb6rrHoHgpyG23sI__iKSlnaYZ9-fRixEciK4gHdow8LyBP/exec", {
+      fetch(SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" }
@@ -101,20 +105,21 @@
       const query = document.getElementById("searchInput").value.trim();
       if(query === "") { alert("Sila masukkan kata carian"); return; }
 
-      fetch(`https://script.google.com/macros/s/AKfycbwXrJ3XfpEC0iEMvd7qzMb6rrHoHgpyG23sI__iKSlnaYZ9-fRixEciK4gHdow8LyBP/exec?action=search&query=${encodeURIComponent(query)}`)
+      fetch(`${SCRIPT_URL}?action=search&query=${encodeURIComponent(query)}`)
       .then(res => res.json())
       .then(data => {
         let resultBox = document.getElementById("result");
         if(data.length > 0){
           let html = "<h3>Hasil Carian:</h3>";
           data.forEach(item => {
-            html += `<p><b>Nama:</b> ${item.nama}<br>
+            html += `<p>
+                     <b>Nama:</b> ${item.nama}<br>
                      <b>Telefon:</b> ${item.telefon}<br>
-                     <b>Rumah:</b> ${item.rumah}<br>
+                     <b>No Rumah:</b> ${item.rumah}<br>
                      <b>Blok:</b> ${item.blok}<br>
-                     <b>Plat:</b> ${item.plat}<br>
-                     <b>Kenderaan:</b> ${item.kenderaan}<br>
-                     <b>Tarikh:</b> ${item.tarikh}</p><hr>`;
+                     <b>No. Plat:</b> ${item.plat}<br>
+                     <b>Jenis:</b> ${item.kenderaan}<br>
+                     </p><hr>`;
           });
           resultBox.innerHTML = html;
         } else {
@@ -125,5 +130,3 @@
   </script>
 </body>
 </html>
-
-
