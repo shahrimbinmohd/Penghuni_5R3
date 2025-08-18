@@ -101,7 +101,7 @@
       const query = document.getElementById("searchInput").value.trim();
       if(query === "") { alert("Sila masukkan kata carian"); return; }
 
-      fetch(`YOUR_WEBAPP_URL_HERE?action=search&query=${encodeURIComponent(query)}`)
+      fetch(`https://script.google.com/macros/s/AKfycbyQ3645siR8L6T0H_DzoVSq_hcb20BaZipiH81uJZLxJrhTxKjlbMu865qQTAYMVR0J/exec?action=search&query=${encodeURIComponent(query)}`)
       .then(res => res.json())
       .then(data => {
         let resultBox = document.getElementById("result");
@@ -125,3 +125,4 @@
   </script>
 </body>
 </html>
+
