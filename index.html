@@ -10,16 +10,10 @@
       background: linear-gradient(120deg, #f0f4ff, #d9e4ff);
       padding: 20px;
     }
-    h2 {
-      text-align: center;
-      color: #2c3e50;
-    }
+    h2 { text-align: center; color: #2c3e50; }
     form, .search-box {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      margin: 20px auto;
-      max-width: 500px;
+      background: #fff; padding: 20px; border-radius: 10px;
+      margin: 20px auto; max-width: 500px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     label { display: block; margin-bottom: 8px; font-weight: bold; }
@@ -27,15 +21,10 @@
       width: 100%; padding: 10px; margin-bottom: 15px;
       border: 1px solid #ccc; border-radius: 6px;
     }
-    button {
-      background: #3498db; color: #fff; border: none; cursor: pointer;
-    }
+    button { background: #3498db; color: #fff; border: none; cursor: pointer; }
     button:hover { background: #2980b9; }
     #result {
-      margin-top: 20px;
-      padding: 15px;
-      background: #ecf0f1;
-      border-radius: 8px;
+      margin-top: 20px; padding: 15px; background: #ecf0f1; border-radius: 8px;
     }
   </style>
 </head>
@@ -79,24 +68,18 @@
   <div id="result"></div>
 
   <script>
-    // URL Web App Google Apps Script (tukar dengan URL sebenar anda!)
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-rvQs0CkW3NcQ5ClHVhxa827DI7zYuoh2Sd5mpwACSMKcaPPbDTwheRqAHOOdBIee/exec";
+    // URL Web App Google Apps Script (TUKAR dengan URL selepas deploy!)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_g4dyq8t-DV6UYuvg7KqF7Tq0A0qvrAkGbXlgMEwVGb0UQ8HvbUls9MBvi9dZ1c5O/exec";
 
     // Fungsi Hantar Data
     document.getElementById("dataForm").addEventListener("submit", function(e){
       e.preventDefault();
       const formData = new FormData(this);
-      const data = {};
-      formData.forEach((value, key) => data[key] = value);
 
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(res => res.text())
-      .then(txt => alert(txt));
-      
+      fetch(SCRIPT_URL, { method: "POST", body: formData })
+        .then(res => res.text())
+        .then(txt => alert(txt));
+
       this.reset();
     });
 
